@@ -109,7 +109,6 @@ def start_end_date(start,end):
         all_tobs.append(tobs_dict)
         
     return jsonify(all_tobs)
-    
 
 if __name__ == '__main__':
     app.run(debug=True)
