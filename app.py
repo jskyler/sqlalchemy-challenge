@@ -32,12 +32,13 @@ app = Flask(__name__)
 def welcome():
     """List all available api routes."""
     return (
-        f"Available Routes:<br/>"
-        f"Precipitation: /api/v1.0/precipitation<br/>"
-        f"Stations: /api/v1.0/stations<br/>"
-        f"TOBs: /api/v1.0/tobs<br/>"
-        f"Start Date: /api/v1.0/&#60;yyyy-mm-dd&#62;<br/>"
-        f"Start/End Date: /api/v1.0/&#60;yyyy-mm-dd&#62;/&#60;yyyy-mm-dd&#62;"
+        f"<b>Available Routes:</b><br/>"
+        f"<br/>"
+        f"<b>Precipitation: </b>/api/v1.0/precipitation<br/>"
+        f"<b>Stations: </b>/api/v1.0/stations<br/>"
+        f"<b>TOBs: </b>/api/v1.0/tobs<br/>"
+        f"<b>Start Date: </b>/api/v1.0/&#60;yyyy-mm-dd&#62;<br/>"
+        f"<b>Start/End Date: </b>/api/v1.0/&#60;yyyy-mm-dd&#62;/&#60;yyyy-mm-dd&#62;"
     )
 
 @app.route("/api/v1.0/precipitation")
