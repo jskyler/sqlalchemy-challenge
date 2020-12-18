@@ -56,6 +56,7 @@ def precipitation():
     
     return jsonify(all_prcp)
 
+
 @app.route("/api/v1.0/stations")
 def stations():
 
