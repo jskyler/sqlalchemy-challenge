@@ -36,7 +36,7 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/start<br/>"
+        f"Temperature stat from the start date(yyyy-mm-dd): /api/v1.0/yyyy-mm-dd<br/>"
         f"/api/v1.0/start/end"
     )
 
@@ -76,6 +76,22 @@ def tobs():
     tobs_results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date > one_year_date).filter(Measurement.station==most_active_station[0]).all()
     
     return jsonify(tobs_results)
+
+
+@app.route('/api/v1.0/<start>')
+def start_date(start):
+    
+    start_results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
+    
+    all_tobs = []
+    for min, max, avg in start_results:
+        tobs_dict = {}
+        tobs_dict["Min"] = min
+        tobs_dict["Max"] = max
+        tobs_dict["Average"] = avg
+        all_tobs.append(tobs_dict)
+        
+    return jsonify(all_tobs)
     
 
 if __name__ == '__main__':
