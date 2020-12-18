@@ -41,6 +41,7 @@ def welcome():
         f"<b>Start/End Date: </b>/api/v1.0/&#60;yyyy-mm-dd&#62;/&#60;yyyy-mm-dd&#62;"
     )
 
+
 @app.route("/api/v1.0/precipitation")
 def precipitation():
 
