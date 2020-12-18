@@ -85,6 +85,7 @@ def tobs():
 @app.route('/api/v1.0/<start>')
 def start_date(start):
     
+    # Find min,max,and avg then filter by start date
     start_results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).all()
     
     all_tobs = []
@@ -101,6 +102,7 @@ def start_date(start):
 @app.route('/api/v1.0/<start>/<end>')
 def start_end_date(start,end):
     
+     # Find min,max,and avg then filter by start and end daate
     start_end_results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
     all_tobs = []
