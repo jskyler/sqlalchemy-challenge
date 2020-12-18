@@ -36,23 +36,22 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start><br/>"
-        f"/api/v1.0/<start>/<end>"
+        f"/api/v1.0/start<br/>"
+        f"/api/v1.0/start/end"
     )
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
 
     # Query all precipitation
-    prcp_results = session.query(Measurement.prcp).all()
-    
+    prcp_results = session.query(Measurement.date,Measurement.prcp).all()
+        
     all_prcp = []
-    for (date, prcp) in prcp_results:
+    for date, prcp in prcp_results:
         prcp_dict = {}
         prcp_dict["Date"] = date
         prcp_dict["Precipitation"] = prcp
         all_prcp.append(prcp_dict)
-
     
     return jsonify(all_prcp)
 
@@ -69,15 +68,14 @@ def stations():
 @app.route("/api/v1.0/tobs")
 def tobs():
 
-    # Query all tobs
-    tobs_results = session.query(Measurement.tobs).all()
+    # Find last date and one year back
+    last_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
+    one_year_date = dt.datetime.strptime(last_date[0], "%Y-%m-%d") - dt.timedelta(days=365)
+    most_active_station = session.query(Measurement.station, func.count(Measurement.station)).group_by(Measurement.station).order_by(func.count(Measurement.station).desc()).first()
     
+    tobs_results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date > one_year_date).filter(Measurement.station==most_active_station[0]).all()
     
-@app.route("/api/v1.0/<start>")
-def start():
-
-    # Query all tobs
-    start_results = session.query(Measurement.tobs).all()
+    return jsonify(tobs_results)
     
 
 if __name__ == '__main__':
