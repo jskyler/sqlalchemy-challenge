@@ -66,6 +66,7 @@ def stations():
     
     return jsonify(all_stations)
 
+
 @app.route("/api/v1.0/tobs")
 def tobs():
 
