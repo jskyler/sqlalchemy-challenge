@@ -33,11 +33,11 @@ def welcome():
     """List all available api routes."""
     return (
         f"Available Routes:<br/>"
-        f"/api/v1.0/precipitation<br/>"
-        f"/api/v1.0/stations<br/>"
-        f"/api/v1.0/tobs<br/>"
-        f"Temperature stat from the start date(yyyy-mm-dd): /api/v1.0/yyyy-mm-dd<br/>"
-        f"/api/v1.0/start/end"
+        f"Precipitation: /api/v1.0/precipitation<br/>"
+        f"Stations: /api/v1.0/stations<br/>"
+        f"TOBs: /api/v1.0/tobs<br/>"
+        f"Start Date: /api/v1.0/&#60;yyyy-mm-dd&#62;<br/>"
+        f"Start/End Date: /api/v1.0/&#60;yyyy-mm-dd&#62;/&#60;yyyy-mm-dd&#62;"
     )
 
 @app.route("/api/v1.0/precipitation")
@@ -85,6 +85,22 @@ def start_date(start):
     
     all_tobs = []
     for min, max, avg in start_results:
+        tobs_dict = {}
+        tobs_dict["Min"] = min
+        tobs_dict["Max"] = max
+        tobs_dict["Average"] = avg
+        all_tobs.append(tobs_dict)
+        
+    return jsonify(all_tobs)
+
+
+@app.route('/api/v1.0/<start>/<end>')
+def start_end_date(start,end):
+    
+    start_end_results = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
+
+    all_tobs = []
+    for min, max, avg in start_end_results:
         tobs_dict = {}
         tobs_dict["Min"] = min
         tobs_dict["Max"] = max
